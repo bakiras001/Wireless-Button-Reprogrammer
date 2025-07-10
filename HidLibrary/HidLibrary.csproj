@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net20;net35;net45;netstandard2</TargetFrameworks>
+    <TargetFrameworks></TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <Version>3.2.49</Version>
@@ -16,6 +16,7 @@
     <PackageProjectUrl>https://github.com/mikeobrien/HidLibrary</PackageProjectUrl>
     <PackageIcon>logo.png</PackageIcon>
     <PackageTags>usb hid</PackageTags>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

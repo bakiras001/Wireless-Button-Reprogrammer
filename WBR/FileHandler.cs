@@ -21,7 +21,6 @@ namespace WBR
         {
             File.WriteAllText(EnvironmentPath + path, text);
         }
-        // TODO: actually write to appdata!
         public static void WriteToAppData(string path, string text)
         {
             System.IO.Directory.CreateDirectory(Appdata);
