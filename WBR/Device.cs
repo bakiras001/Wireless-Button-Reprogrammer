@@ -1,126 +1,81 @@
-﻿using System;
+﻿using HidLibrary;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-
-using HidLibrary;
 
 namespace WBR
 {
-    /// <summary>
-    /// Handles input from a HID device based on Vendor and Product ID
-    /// </summary>
     public class Device
     {
-        public Device(string device, int vid, int pid)
+        public int Vid { get; private set; } // Vendor ID
+        public int Pid { get; private set; } // Product ID
+        public string DeviceName { get; private set; }
+
+
+        public Device(int vid, int pid)
         {
             Vid = vid;
             Pid = pid;
-            DeviceName = device;
+        }
+        public Device(int vid, int pid, string deviceName)
+        {
+            Vid = vid;
+            Pid = pid;
+            DeviceName = deviceName;
         }
 
-        private int Vid; // Vendor ID
-        private int Pid; // Product ID
-        private string DeviceName;
-        private List<Thread> Threads;
-        private bool Abort = false;
-        /// <summary>
-        /// Goes through every single thread created previously and aborts them
-        /// </summary>
-        public void Stop()
+
+        
+        public Device(HidDevice device)
         {
-            Abort = true;
-            if (Threads == null) return;
-
-            for(int i = 0; i < Threads.Count; i++)
+            if (!device.DevicePath.Contains("vid_") || !device.DevicePath.Contains("pid_"))
             {
-                if (Threads[i] != null) Threads[i].Interrupt();
-                Threads.RemoveAt(i);
-            }
-        }
-
-        /// <summary>
-        /// Initializes HID device and opens a thread for each "sub-hid"
-        /// </summary>
-        public void Init()
-        {
-            Abort = false;
-            var f = HidDevices.Enumerate();
-            var devices = HidDevices.Enumerate(Vid, Pid).ToList();
-
-            // Initializing
-            
-            for (int i = 0; i < devices.Count(); i++)
-            {
-                HidDevice device = devices[i];
-
-                if (device == null) 
-                    break;
-
-                device.OpenDevice();
-                //device.MonitorDeviceEvents = true;
-            }
-            
-            MediaHandler.VOLUME_CURRENT = (int)VideoPlayerController.AudioManager.GetMasterVolume();
-
-            // Creating threads
-            Threads = new List<Thread>(new Thread[devices.Count]);
-            for (int i = 0; i < devices.Count(); i++)
-            {
-                HidDevice device = devices[i];
-                Threads[i] = new Thread(() =>
-                {
-                    while (device != null && !Abort)
-                    {
-                        ReportHandler(device);
-                    }
-                });
-                Threads[i].Start();
-            }
-        }
-
-        /// <summary>
-        /// Handles the bytes send by the device
-        /// </summary>
-        private void ReportHandler(HidDevice device)
-        {
-            byte[] data = device.ReadReport().Data.ToArray();
-            Console.WriteLine(data);
-            if (data.Length < 1)
+                Vid = 0;
+                Pid = 0;
                 return;
-
-            Console.WriteLine(BytesToString(data));
-
-            if (DevicePresets.Contains(DeviceName, data) && !Abort)
-            {
-                ClickHandler.HandleClick();
             }
 
+            //Console.WriteLine("Path: " + device.DevicePath);
+            string _v = device.DevicePath.Split("vid_")[1];
+            string _p = _v.Split("pid_")[1];
+            string v = _v.Substring(0, 4);
+            string p = _p.Substring(0, 4);
+            string _id = _p.Contains("col") ? _p.Split("col")[1].Substring(0, 2) : "0";
+            int vid = Convert.ToInt32(v, 16);
+            int pid = Convert.ToInt32(p, 16);
+            int id = Convert.ToInt32(_id);
+
+            Vid = vid;
+            Pid = pid;
+
+            DeviceName = device.Description;
         }
 
-        private string BytesToString(byte[] bytes)
+
+
+
+        public override bool Equals(object? obj)
         {
-            string res = "{ ";
-            int size = bytes.Length;
-            for (int i = 0; i < size; i++)
+            if (obj is Device)
             {
-                res += "[" + (int)bytes[i] + "]";
-
-                if (i != size - 1)
-                {
-                    res += ", ";
-                }
-                else
-                {
-                    res += " ";
-                }
-
+                Device other = (Device)obj;
+                return Vid == other.Vid && Pid == other.Pid;// && Id == other.Id;
             }
-            return res + "}";
+            return false;
         }
 
+        public override int GetHashCode()
+        {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = 17;
+                hash = hash * 23 + Vid.GetHashCode();
+                hash = hash * 23 + Pid.GetHashCode();
+                //hash = hash * 23 + Id.GetHashCode();
+                return hash;
+            }
+        }
     }
 }

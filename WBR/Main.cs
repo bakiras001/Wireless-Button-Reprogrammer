@@ -12,13 +12,13 @@ namespace WBR
     public class Main
     {
         public bool Started { get; private set; } = false;
-        public Device Device { get; private set; }
+        public DeviceHandler Device { get; private set; }
 
         public Main(){}
 
         public void Start(string deviceName, int vid, int pid)
         {
-            Device = new Device(deviceName, vid, pid);
+            Device = new DeviceHandler(vid, pid, deviceName);
             Device.Init();
 
             Started = true;

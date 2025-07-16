@@ -34,10 +34,16 @@ namespace WBR
             ErrorHandler.NewError("Starting");
             InitializeComponent();
 
+           // var debugWindow = new DebugWindow();
+           // debugWindow.Owner = this; // Optional: set main window as owner
+           // debugWindow.Show();
+
             Main = new Main();
             SetupTray();
             Start();
             SetStartup();
+
+
 
         }
 

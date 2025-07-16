@@ -43,14 +43,14 @@ namespace WBR
         {
             if(clicks == 1)
             {
-                MediaHandler.PauseResumeAudio();
+                MediaHandler.first();
             } else if(clicks == 2)
             {
                 WaitForIntervalToFinish();
             }
             else if (clicks == 3)
             {
-                MediaHandler.PrevAudio();
+                MediaHandler.third();
                 ConsecutiveClicks = 0;
             }
         }
@@ -64,14 +64,11 @@ namespace WBR
             new Thread(() =>
             {
                 // "Wait" until interval elapsed
-                while (Clock.ElapsedMilliseconds < ClickInterval)
-                {
-
-                }
+                while (Clock.ElapsedMilliseconds < ClickInterval) {}
                 // Check if in the elapsed time frame no other click occurred
                 if (ConsecutiveClicks == 2)
                 {
-                    MediaHandler.NextAudio();
+                    MediaHandler.second();
                     ConsecutiveClicks = 0;
                 }
                 return;
