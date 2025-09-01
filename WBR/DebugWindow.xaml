@@ -1,0 +1,119 @@
+﻿<Window x:Class="WBR.DebugWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WBR"
+        mc:Ignorable="d"
+        Title="WBR" Width="800" Background="#2B2D31" ResizeMode="CanResize" Height="500">
+
+    <ListBox Name="controllerList" BorderBrush="#707070" BorderThickness="1" Background="#2B2D31"
+             HorizontalAlignment="Stretch" Margin="3,3,3,3" >
+
+        <ListBox.ItemContainerStyle>
+            <Style TargetType="ListBoxItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <ContentPresenter/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Setter Property="Margin" Value="2,1,2,1"/>
+                <Setter Property="Width" Value="auto"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="IsTabStop" Value="False"/>
+
+            </Style>
+        </ListBox.ItemContainerStyle>
+
+
+        
+                <ListBoxItem
+            HorizontalAlignment="Stretch">
+            <ListBox Background="#313338" IsTabStop="False" Focusable="False">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Background="Transparent" Padding="3">
+                                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
+                <StackPanel>
+                    <DockPanel Margin="5,5,0,5">
+                        <TextBlock Margin="5,0,0,5" Foreground="#AEAFB5" Background="#313338" FontWeight="Bold" FontSize="20">Detected devices (reconnect your device)</TextBlock>
+                        <Button Background="#313338"
+                          BorderBrush="#AEAFB5" Width="100" HorizontalAlignment="Right">
+                            <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0">Clear</TextBlock>
+                        </Button>
+                    </DockPanel>
+                    <!-- Header row: only once -->
+                    <Grid Background="#313338" Height="35" Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="6*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="0">
+                            <TextBlock Text="Device" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                        </Border>
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="1">
+                            <TextBlock Text="Vendor ID" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                        </Border>
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="2">
+                            <TextBlock Text="Product ID" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- ItemsControl: only items -->
+                    <ItemsControl ItemsSource="{Binding Devices}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Background="#313338" Margin="0,1,0,1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="6*" />
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="2*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="0">
+                                        <TextBlock Text="{Binding DeviceName}" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                                    </Border>
+                                    <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="1">
+                                        <TextBlock Text="{Binding Vid, StringFormat=0x{0:X4}}" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                                    </Border>
+                                    <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="2">
+                                        <TextBlock Text="{Binding Pid, StringFormat=0x{0:X4}}" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+
+
+
+
+            </ListBox>
+        </ListBoxItem>
+        
+        
+        
+    </ListBox>
+</Window>

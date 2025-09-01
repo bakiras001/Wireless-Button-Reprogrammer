@@ -29,14 +29,11 @@ namespace WBR
         private NotifyIcon TrayIcon;
         private WindowState StoredWindowState = WindowState.Normal;
         public static Config Config = new Config();
+        private static DebugWindow webugWindow = null;
         public MainWindow()
         {
             ErrorHandler.NewError("Starting");
             InitializeComponent();
-
-           // var debugWindow = new DebugWindow();
-           // debugWindow.Owner = this; // Optional: set main window as owner
-           // debugWindow.Show();
 
             Main = new Main();
             SetupTray();
@@ -199,6 +196,18 @@ namespace WBR
             Main.Stop();
 
             Active.Text = Main.Started.ToString();
+        }
+
+        private void Settings(object sender, RoutedEventArgs e)
+        {
+            if(webugWindow == null)
+                webugWindow = new DebugWindow();
+            webugWindow.Show();
+            if (webugWindow != null && webugWindow.IsVisible)
+            {
+                webugWindow.Activate();
+                return;
+            }
         }
 
         private int ParseStringToInt(string text)
