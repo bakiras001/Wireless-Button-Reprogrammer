@@ -56,13 +56,14 @@
                 </ListBox.ItemContainerStyle>
 
                 <StackPanel>
-                    <DockPanel Margin="5,5,0,5">
-                        <TextBlock Margin="5,0,0,5" Foreground="#AEAFB5" Background="#313338"  FontSize="15">Please reconnect your device</TextBlock>
+                    <DockPanel Margin="5,0,0,5">
+                        <TextBlock Margin="0,0,0,0" Foreground="#AEAFB5" Background="#313338"  FontSize="15">Please reconnect your device</TextBlock>
                         <Button Background="#313338" Click="ClearDevices"
-                          BorderBrush="#AEAFB5" Width="76" HorizontalAlignment="Right">
+                          BorderBrush="#AEAFB5" Width="79" HorizontalAlignment="Right">
                             <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0">Clear</TextBlock>
                         </Button>
                     </DockPanel>
+
                     <!-- Header row: only once -->
                     <Grid Background="#313338" Height="20" Margin="0,0,0,5">
                         <Grid.ColumnDefinitions>
@@ -114,13 +115,26 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
-                    <Border BorderBrush="#AEAFB5" BorderThickness="1 0 1 1" >
-                        <StackPanel>
 
-                            <Border BorderBrush="#AEAFB5" BorderThickness="0 0 0 1" >
-                                <TextBlock Margin="10 0 0 0" Text="Detected bytes:" FontWeight="Bold" HorizontalAlignment="Left" Foreground="#AEAFB5"/>
-                            </Border>
-                            <TextBox IsReadOnly="True" Background="Transparent" BorderThickness="0" Margin="10 0 0 0" Text="" HorizontalAlignment="Left" Foreground="#AEAFB5" Name="BytesTextBlock"/>
+                        <Border Margin="0 5 0 0" BorderBrush="#AEAFB5" BorderThickness="1" >
+                        <StackPanel>
+                            <Grid Background="#313338" Height="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="6*" />
+                                    <ColumnDefinition Width="2*" />
+
+                                </Grid.ColumnDefinitions>
+                                <Border BorderBrush="#AEAFB5" BorderThickness="0 0 1 1" Grid.Column="0">
+                                    <TextBlock Margin="10 0 0 0" Text="Detected bytes (wait ~10s before pressing):" FontWeight="Bold" HorizontalAlignment="Left" Foreground="#AEAFB5"/>
+                                </Border>
+
+                                <Border BorderBrush="#AEAFB5" BorderThickness="0 0 0 1" Grid.Column="1">
+                                    <Button Background="#313338" BorderThickness="0">
+                                        <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0" >Save</TextBlock>
+                                    </Button>
+                                </Border>
+                            </Grid>
+                            <TextBox IsReadOnly="True" Background="Transparent" BorderThickness="0" Margin="5 0 0 0" Text="" HorizontalAlignment="Left" Foreground="#AEAFB5" Name="BytesTextBlock"/>
 
                         </StackPanel>
                     </Border>
