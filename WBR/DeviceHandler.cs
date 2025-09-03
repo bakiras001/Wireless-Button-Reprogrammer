@@ -83,8 +83,10 @@ namespace WBR
             Console.WriteLine(data);
             if (data.Length < 1)
                 return;
-
-            action(data);
+            try
+            {
+                action(data);
+            } catch{}
             //ActionHandler(data);
 
         }

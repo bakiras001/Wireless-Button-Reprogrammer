@@ -44,7 +44,6 @@ namespace WBR
 
 
         }
-
         // Start
         private void Start(object sender, RoutedEventArgs e)
         {
@@ -53,6 +52,7 @@ namespace WBR
         private void Start()
         {
             DevicePresets.Init();
+            RefreshComboBox();
             Config.LoadConfig();
             ApplyConfig();
             Apply();
@@ -60,6 +60,22 @@ namespace WBR
             Active.Text = Main.Started.ToString();
         }
 
+        private void RefreshComboBox()
+        {
+            DeviceName.Items.Clear();
+            bool first = true;
+            foreach(var pair in DevicePresets.Presets)
+            {
+                DeviceName.Items.Add(new ComboBoxItem { Content = pair.Key, IsSelected = first });
+                if(first) first = false;
+            }
+
+        }
+
+        private void ComboBoxHover(object sender, RoutedEventArgs e)
+        {
+            RefreshComboBox();
+        }
 
         // Apply
         private void Apply(object sender, RoutedEventArgs e)

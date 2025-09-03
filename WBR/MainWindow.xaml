@@ -124,12 +124,8 @@
 
                 <StackPanel >
                     <TextBlock Foreground="#AEAFB5" Background="#313338">Device</TextBlock>
-                    <ComboBox SelectionChanged="ComboBox_SelectionChanged" Height="18" FontSize="9"
+                    <ComboBox MouseEnter="ComboBoxHover"  SelectionChanged="ComboBox_SelectionChanged" Height="18" FontSize="9"
                               Name="DeviceName" SelectedValuePath="Content">
-                        <ComboBoxItem IsSelected="True">HyperX Cloud II Wireless (DTS)</ComboBoxItem>
-                        <ComboBoxItem IsSelected="True">HyperX Cloud III Wireless</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">HyperX Cloud Alpha</ComboBoxItem>
-                        <ComboBoxItem IsSelected="False">Corsair Virtuoso XT</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
             </ListBox>

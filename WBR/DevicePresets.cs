@@ -10,7 +10,7 @@ namespace WBR
 {
     internal class DevicePresets
     {
-        private static Dictionary<string, List<List<byte>>> Presets = new Dictionary<string, List<List<byte>>>();
+        public static Dictionary<string, List<List<byte>>> Presets = new Dictionary<string, List<List<byte>>>();
         private static readonly string DefaultJson = "{\"HyperX Cloud II Wireless (DTS)\":[[255,187,32,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[255,187,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[255,187,32,1,0,0,0,0,0,0,0,0,0,0,0,0,127,0,0],[255,187,32,0,0,0,0,0,0,0,0,0,0,0,0,0,127,0,0]],\"Corsair Virtuoso XT\":[[1,1,142,0,0,0,0,0,197,107,181,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1,1,142,0,1,0,0,0,197,107,181,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],\"HyperX Cloud III Wireless\":[[10,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[10,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],\"HyperX Cloud Alpha\":[[187,35,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[187,35,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]}";
         private static readonly string FileName = "presets.json";
         private static JsonSerializerOptions Options = new JsonSerializerOptions { WriteIndented = true };

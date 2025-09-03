@@ -29,7 +29,7 @@ namespace WBR
 
         private void Save(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(NameInput.Text)) return;
+            if (string.IsNullOrWhiteSpace(NameInput.Text) || !FocusedOnce) return;
             DevicePresets.Add(NameInput.Text, ByteList);
             this.Close();
         }
