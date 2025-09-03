@@ -19,7 +19,7 @@ namespace WBR
         public void Start(string deviceName, int vid, int pid)
         {
             Device = new DeviceHandler(vid, pid, deviceName);
-            Device.Init();
+            Device.Init(Device.ActionHandler);
 
             Started = true;
         }

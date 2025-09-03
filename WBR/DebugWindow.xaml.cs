@@ -1,5 +1,6 @@
 ﻿using HidLibrary;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,13 +18,40 @@ using System.Windows.Shapes;
 
 namespace WBR
 {
+
+    public class ByteArrayComparer : IEqualityComparer<byte[]>
+    {
+        public bool Equals(byte[]? x, byte[]? y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (x == null || y == null) return false;
+            if (x.Length != y.Length) return false;
+            return x.SequenceEqual(y);
+        }
+
+        public int GetHashCode(byte[] obj)
+        {
+            // einfacher Hash: Länge + Bytes kombinieren
+            unchecked
+            {
+                int hash = 17;
+                foreach (var b in obj)
+                    hash = hash * 31 + b;
+                return hash;
+            }
+        }
+    }
     /// <summary>
     /// Interaction logic for DebugWindow.xaml
     /// </summary>
     public partial class DebugWindow : Window
     {
         private List<HidDevice> DevicesBefore;
-        public ObservableCollection<Device> Devices { get; } = new();
+        public ObservableCollection<Device> Devices { get; set; } = new();
+        public string DeviceName { get; set; }
+        private DeviceHandler? selectedDevice = null;
+
+        private Dictionary<byte[], int> bytes = new Dictionary<byte[], int>(new ByteArrayComparer());
         public DebugWindow()
         {
             InitializeComponent();
@@ -50,11 +78,6 @@ namespace WBR
             DevicesBefore = HidDevices.Enumerate().ToList();
         }
 
-        /*                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    Devices.Clear();
-                });
-        */
 
         private void ScanForNewDevicesLoop()
         {
@@ -99,14 +122,75 @@ namespace WBR
                     }
                 }
 
+
+
                 SetDevicesBefore();
                 System.Threading.Thread.Sleep(1000); // Wait for 5 seconds before scanning again
             }
         }
 
+        public void HandleBytes(byte[] data)
+        {
+            if (selectedDevice == null) return;
+            if (!bytes.ContainsKey(data))
+            {
+                bytes[data] = 0;
+            }
+            bytes[data] += 1;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                BytesTextBlock.Text = "";
+                var bytesList = bytes.ToList();
+                int l = bytesList.Count;
+                int i = 0;
+                foreach (var pair in bytesList)
+                {
+                    if (pair.Value > 1)
+                    {
+                        BytesTextBlock.Text += $"{ByteArrToStr(pair.Key)} ({pair.Value})";
+                        if (i < l - 1)
+                            BytesTextBlock.Text += "\n";
+                    }
+                    i++;
+                }
+            });
+        }
+
+        private void Select(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var device = button?.DataContext as Device; // Typ anpassen
+            if (device != null)
+            {
+                selectedDevice = new DeviceHandler(device.Vid, device.Pid, device.DeviceName);
+                selectedDevice.Init(HandleBytes);
+                var name = device.DeviceName;
+                var vid = device.Vid;
+                var pid = device.Pid;
+            }
+        }
+
+        private void ClearDevices(object sender, RoutedEventArgs e)
+        {
+            Devices.Clear();
+            bytes.Clear();
+            BytesTextBlock.Text = "";
+        }
+
         private void DeviceListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        public static string ByteArrToStr(byte[] data)
+        {
+            string res = "[";
+            for (int i = 0; i < data.Length - 1; i++)
+            {
+                res += data[i] + ",";
+            }
+            res += data[data.Length - 1] + "]";
+            return res;
         }
     }
 }

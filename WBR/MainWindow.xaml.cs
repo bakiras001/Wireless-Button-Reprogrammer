@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,8 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
-using Microsoft.Win32;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Window = System.Windows.Window;
 
 
 
@@ -29,7 +30,7 @@ namespace WBR
         private NotifyIcon TrayIcon;
         private WindowState StoredWindowState = WindowState.Normal;
         public static Config Config = new Config();
-        private static DebugWindow webugWindow = null;
+        private static DebugWindow debugWindow = null;
         public MainWindow()
         {
             ErrorHandler.NewError("Starting");
@@ -200,12 +201,13 @@ namespace WBR
 
         private void Settings(object sender, RoutedEventArgs e)
         {
-            if(webugWindow == null)
-                webugWindow = new DebugWindow();
-            webugWindow.Show();
-            if (webugWindow != null && webugWindow.IsVisible)
+            if(debugWindow == null || !debugWindow.IsLoaded || debugWindow.Visibility != Visibility.Visible)
+                debugWindow = new DebugWindow();
+
+            debugWindow.Show();
+            if (debugWindow != null && debugWindow.IsVisible)
             {
-                webugWindow.Activate();
+                debugWindow.Activate();
                 return;
             }
         }

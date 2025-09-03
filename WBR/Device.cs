@@ -11,7 +11,7 @@ namespace WBR
     {
         public int Vid { get; private set; } // Vendor ID
         public int Pid { get; private set; } // Product ID
-        public string DeviceName { get; private set; }
+        public string DeviceName { get; }
 
 
         public Device(int vid, int pid)

@@ -185,7 +185,7 @@
                 <StackPanel>
                     <Button Background="#313338" Click="Settings"
                             BorderBrush="#AEAFB5">
-                        <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="15,0,15,0">Settings</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="15,0,15,0">Debug</TextBlock>
                     </Button>
 
                 </StackPanel>

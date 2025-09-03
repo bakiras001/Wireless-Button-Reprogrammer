@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WBR"
         mc:Ignorable="d"
-        Title="WBR" Width="800" Background="#2B2D31" ResizeMode="CanResize" Height="500">
+        Title="WBR" Width="500" Background="#2B2D31" ResizeMode="CanMinimize" SizeToContent="Height">
 
     <ListBox Name="controllerList" BorderBrush="#707070" BorderThickness="1" Background="#2B2D31"
              HorizontalAlignment="Stretch" Margin="3,3,3,3" >
@@ -57,27 +57,30 @@
 
                 <StackPanel>
                     <DockPanel Margin="5,5,0,5">
-                        <TextBlock Margin="5,0,0,5" Foreground="#AEAFB5" Background="#313338" FontWeight="Bold" FontSize="20">Detected devices (reconnect your device)</TextBlock>
-                        <Button Background="#313338"
-                          BorderBrush="#AEAFB5" Width="100" HorizontalAlignment="Right">
+                        <TextBlock Margin="5,0,0,5" Foreground="#AEAFB5" Background="#313338"  FontSize="15">Please reconnect your device</TextBlock>
+                        <Button Background="#313338" Click="ClearDevices"
+                          BorderBrush="#AEAFB5" Width="76" HorizontalAlignment="Right">
                             <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0">Clear</TextBlock>
                         </Button>
                     </DockPanel>
                     <!-- Header row: only once -->
-                    <Grid Background="#313338" Height="35" Margin="0,0,0,5">
+                    <Grid Background="#313338" Height="20" Margin="0,0,0,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="6*" />
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
-                        <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="0">
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="0">
                             <TextBlock Text="Device" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
                         </Border>
-                        <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="1">
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="1">
                             <TextBlock Text="Vendor ID" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
                         </Border>
-                        <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="2">
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="2">
                             <TextBlock Text="Product ID" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                        </Border>
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="3">
                         </Border>
                     </Grid>
 
@@ -85,25 +88,43 @@
                     <ItemsControl ItemsSource="{Binding Devices}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Background="#313338" Margin="0,1,0,1">
+                                <Grid Background="#313338" Margin="0,0,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="6*" />
                                         <ColumnDefinition Width="2*" />
                                         <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="2*" />
                                     </Grid.ColumnDefinitions>
-                                    <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="0">
+                                    <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="0">
                                         <TextBlock Text="{Binding DeviceName}" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
                                     </Border>
-                                    <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="1">
+                                    <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="1">
                                         <TextBlock Text="{Binding Vid, StringFormat=0x{0:X4}}" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
                                     </Border>
-                                    <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="2">
+                                    <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="2">
                                         <TextBlock Text="{Binding Pid, StringFormat=0x{0:X4}}" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                                    </Border>
+                                    <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="3">
+                                        <Button Background="#313338" Click="Select" BorderThickness="0">
+                                            <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0" >Select</TextBlock>
+                                        </Button>
                                     </Border>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+
+                    <Border BorderBrush="#AEAFB5" BorderThickness="1 0 1 1" >
+                        <StackPanel>
+
+                            <Border BorderBrush="#AEAFB5" BorderThickness="0 0 0 1" >
+                                <TextBlock Margin="10 0 0 0" Text="Detected bytes:" FontWeight="Bold" HorizontalAlignment="Left" Foreground="#AEAFB5"/>
+                            </Border>
+                            <TextBox IsReadOnly="True" Background="Transparent" BorderThickness="0" Margin="10 0 0 0" Text="" HorizontalAlignment="Left" Foreground="#AEAFB5" Name="BytesTextBlock"/>
+
+                        </StackPanel>
+                    </Border>
+
                 </StackPanel>
 
 

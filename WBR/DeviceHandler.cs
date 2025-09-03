@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using HidLibrary;
+using Theraot;
 
 namespace WBR
 {
@@ -39,7 +40,7 @@ namespace WBR
         /// <summary>
         /// Initializes HID device and opens a thread for each "sub-hid"
         /// </summary>
-        public void Init()
+        public void Init(Action<byte[]> action)
         {
             Abort = false;
             devices = HidDevices.Enumerate(device.Vid, device.Pid).ToList();
@@ -66,7 +67,7 @@ namespace WBR
                 {
                     while (device != null && !Abort)
                     {
-                        ReportHandler(device);
+                        ReportHandler(device, action);
                     }
                 });
                 Threads[i].Start();
@@ -76,18 +77,22 @@ namespace WBR
         /// <summary>
         /// Handles the bytes send by the device
         /// </summary>
-        private void ReportHandler(HidDevice device)
+        private void ReportHandler(HidDevice device, Action<byte[]> action )
         {
             byte[] data = device.ReadReport().Data.ToArray();
             Console.WriteLine(data);
             if (data.Length < 1)
                 return;
 
+            action(data);
+            //ActionHandler(data);
+
+        }
+        public void ActionHandler(byte[] data) {
             if (DevicePresets.Contains(this.device.DeviceName, data) && !Abort)
             {
                 ClickHandler.HandleClick();
             }
-
         }
     }
 }
