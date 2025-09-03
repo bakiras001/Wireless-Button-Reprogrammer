@@ -8,6 +8,7 @@
 * [Setup](#setup)
 * [Get Device Supported](#get-device-supported)
 * [How To Change Keycodes](#changing-keycodes)
+* [Preview](#preview)
 * [Technologies](#technologies)
 
 ---
@@ -68,6 +69,16 @@ To make other peoples lives easier, please be so kind and share your `presets.js
 
 Use this [MSDN list](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes) to find desired keycodes.
 Enter them in the program, then click **Apply** and **Start**.
+
+---
+
+## Preview
+### Main Application
+---
+![Main](https://raw.githubusercontent.com/TizianGth/Wireless-Button-Reprogrammer/refs/heads/main/doc/img/Application.png)
+### Debug Application
+---
+![Debug](https://raw.githubusercontent.com/TizianGth/Wireless-Button-Reprogrammer/refs/heads/main/doc/img/Debug.png)
 
 ---
 
