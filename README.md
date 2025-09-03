@@ -1,5 +1,5 @@
 # Wireless Button Reprogrammer
-
+#### `Personal note: Thank you for having a look at this project, a star would be greatly appreciated!`
 ## Table of Contents
 
 * [Overview](#overview)
@@ -49,6 +49,8 @@ Only use this tool if you’re okay with losing the original behavior.
 ---
 
 ## Get Device Supported
+### Help others and share your findings!
+To make other peoples lives easier, please be so kind and share your `presets.json` (located at `%appdata%` -> `WBR`) by submitting an [Issue](https://github.com/TizianGth/Wireless-Button-Reprogrammer/issues)!
 
 1. Download and run [`WBR.exe`](https://github.com/TizianGuth/Wireless-Button-Reprogrammer/releases/latest)
 2. Press `Debug`
