@@ -52,6 +52,7 @@ namespace WBR
         }
         private void Start()
         {
+            DevicePresets.Init();
             Config.LoadConfig();
             ApplyConfig();
             Apply();
