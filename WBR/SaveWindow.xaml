@@ -1,0 +1,33 @@
+﻿<Window x:Class="WBR.SaveWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WBR"
+        mc:Ignorable="d"
+        Title="Save?" Width="300" Height="80" Background="#2B2D31" ResizeMode="CanMinimize" SizeToContent="Height">
+    <!-- Header row: only once -->
+    <Grid Height="20" Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="12*" />
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBox Name="NameInput" GotFocus="NameGotFocus" Background="#313338" Foreground="#AEAFB5" Text="Enter Preset Name"></TextBox>
+
+        <Border Background="#313338" BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="2">
+            <Button Click="Cancel" Foreground="#AEAFB5" BorderThickness="0" Background="Transparent">
+                Cancel
+            </Button>
+
+        </Border>
+        <Border Background="#313338" BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="4">
+            <Button Click="Save" Foreground="#AEAFB5" BorderThickness="0" Background="Transparent">
+                Save
+            </Button>
+        </Border>
+    </Grid>
+</Window>

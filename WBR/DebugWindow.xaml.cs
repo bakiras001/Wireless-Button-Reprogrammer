@@ -52,6 +52,9 @@ namespace WBR
         private DeviceHandler? selectedDevice = null;
 
         private Dictionary<byte[], int> bytes = new Dictionary<byte[], int>(new ByteArrayComparer());
+        private int SelectedVid = 0;
+        private int SelectedPid = 0;
+        private int Threshold = 1;
         public DebugWindow()
         {
             InitializeComponent();
@@ -125,7 +128,7 @@ namespace WBR
 
 
                 SetDevicesBefore();
-                System.Threading.Thread.Sleep(1000); // Wait for 5 seconds before scanning again
+                System.Threading.Thread.Sleep(1000);
             }
         }
 
@@ -145,7 +148,7 @@ namespace WBR
                 int i = 0;
                 foreach (var pair in bytesList)
                 {
-                    if (pair.Value > 1)
+                    if (pair.Value > Threshold)
                     {
                         BytesTextBlock.Text += $"{ByteArrToStr(pair.Key)} ({pair.Value})";
                         if (i < l - 1)
@@ -155,7 +158,22 @@ namespace WBR
                 }
             });
         }
-
+        
+        private void SavePreset(object sender, RoutedEventArgs e)
+        {
+            if (SelectedVid + SelectedPid == 0) return;
+            var keys = bytes.Keys.ToList();
+            List<List<byte>> bytesCleaned = new List<List<byte>>(keys.Count());
+            foreach(var b in keys)
+            {
+                if (bytes[b] > Threshold)
+                {
+                    bytesCleaned.Add(new List<byte>(b));
+                }
+            }
+            var t = new SaveWindow(SelectedVid, SelectedPid, bytesCleaned);
+            t.Show();
+        }
         private void Select(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
@@ -164,9 +182,8 @@ namespace WBR
             {
                 selectedDevice = new DeviceHandler(device.Vid, device.Pid, device.DeviceName);
                 selectedDevice.Init(HandleBytes);
-                var name = device.DeviceName;
-                var vid = device.Vid;
-                var pid = device.Pid;
+                SelectedVid = device.Vid;
+                SelectedPid = device.Pid;
             }
         }
 
@@ -175,6 +192,8 @@ namespace WBR
             Devices.Clear();
             bytes.Clear();
             BytesTextBlock.Text = "";
+            SelectedVid = 0;
+            SelectedPid = 0;
         }
 
         private void DeviceListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

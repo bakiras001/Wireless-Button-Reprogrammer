@@ -31,7 +31,15 @@ namespace WBR
                 ErrorHandler.NewError(e);
             }
         }
-
+        public static void Add(string name, List<List<byte>> bytes)
+        {
+            if (!Presets.ContainsKey(name))
+            {
+                Presets.Add(name, bytes);
+            }
+            Presets[name] = bytes; // allow user to overwrite possibly existing presets
+            Save();
+        }
         public static bool Contains(string device, byte[] bytes)
         {
             if (!Presets.ContainsKey(device))
