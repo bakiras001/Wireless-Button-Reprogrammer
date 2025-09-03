@@ -5,10 +5,9 @@
 * [Overview](#overview)
 * [Warning](#warning)
 * [Supported Devices](#supported-devices)
-* [Request Support for Your Device](#request-support-for-your-device)
 * [Setup](#setup)
-* [Finding Vendor & Product ID](#finding-vendor--product-id)
-* [Changing Keycodes](#changing-keycodes)
+* [Get Device Supported](#get-device-supported)
+* [How To Change Keycodes](#changing-keycodes)
 * [Technologies](#technologies)
 
 ---
@@ -36,41 +35,30 @@ Only use this tool if you’re okay with losing the original behavior.
 * HyperX Cloud III Wireless
 * Corsair Virtuoso XT
 
-[Want your device supported?](#request-support-for-your-device)
-
----
-
-## Request Support for Your Device
-
-1. Download and run [`Debug.exe`](https://github.com/TizianGuth/Wireless-Button-Reprogrammer/releases/tag/Debug)
-2. Follow the prompts
-3. Open a GitHub issue and share your readings (`debug.json`)
+[Want your device supported?](#get-device-supported)
 
 ---
 
 ## Setup
 
-1. Download the `.exe` from [Releases](https://github.com/TizianGuth/Wireless-Button-Reprogrammer/releases)
-2. Run the program
-3. Input your VID & PID (see below)
-4. Click **Apply**, then **Start**
-
+1. Download and run [`WBR.exe`](https://github.com/TizianGuth/Wireless-Button-Reprogrammer/releases/latest)
+2. Press `Debug`
+3. Reconnect your device
+4. Select your device
+5. Finished!
 ---
 
-## Finding Vendor & Product ID
+## Get Device Supported
 
-**Easiest Method (New):**
-Download [`debug.zip`](https://github.com/Tiziam/Wireless-Button-Reprogrammer/releases/tag/Debug) and follow instructions to step 3.
-
-**Alternative (Old method - Busdog):**
-
-1. Install [Busdog](https://github.com/djpnewton/busdog)
-2. Enable "Automatically trace new Devices"
-3. Unplug & replug your USB dongle
-4. Look for `VID_XXXX` and `PID_XXXX`
-
-   * ![Trace](https://github.com/GuthiYT/hyperxrebutton/blob/main/doc/img/busdog_trace_new.png)
-   * ![Device](https://github.com/GuthiYT/hyperxrebutton/blob/main/doc/img/busdog_device.png)
+1. Download and run [`WBR.exe`](https://github.com/TizianGuth/Wireless-Button-Reprogrammer/releases/latest)
+2. Press `Debug`
+3. Reconnect your device
+4. Select your device
+5. Wait 5-10s after replugging
+6. Press the desired button on your headset multiple times (as a precaution, to account for occasionally changing "click signatures")
+7. Make sure the output looks reasonable, then press `Save` and enter a custom preset name
+8. Select the preset from the drop-down menue.
+9. Finished!
 
 ---
 
@@ -82,9 +70,8 @@ Enter them in the program, then click **Apply** and **Start**.
 ---
 
 ## Technologies
-
+* C#
 * WPF (.NET 8.0, Visual Studio)
-* [AudioManager](https://gist.github.com/sverrirs/d099b34b7f72bb4fb386)
 * [HIDLibrary](https://github.com/mikeobrien/HidLibrary)
 
 ---
