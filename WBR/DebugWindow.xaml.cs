@@ -55,9 +55,15 @@ namespace WBR
         private int SelectedVid = 0;
         private int SelectedPid = 0;
         private int Threshold = 1;
-        public DebugWindow()
+
+        private Action SaveAction;
+        private Config ConfigRef;
+        public DebugWindow(Action action, ref Config config)
         {
+            ConfigRef = config;
             InitializeComponent();
+
+            SaveAction = action;
 
             SetDevicesBefore();
             DataContext = this;
@@ -176,6 +182,7 @@ namespace WBR
         }
         private void Select(object sender, RoutedEventArgs e)
         {
+
             var button = sender as Button;
             var device = button?.DataContext as Device; // Typ anpassen
             if (device != null)
@@ -184,6 +191,9 @@ namespace WBR
                 selectedDevice.Init(HandleBytes);
                 SelectedVid = device.Vid;
                 SelectedPid = device.Pid;
+                ConfigRef.VendorID = SelectedVid;
+                ConfigRef.ProductID = SelectedPid;
+                SaveAction();
             }
         }
 

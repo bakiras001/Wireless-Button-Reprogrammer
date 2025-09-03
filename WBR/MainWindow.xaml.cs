@@ -72,11 +72,6 @@ namespace WBR
 
         }
 
-        private void ComboBoxHover(object sender, RoutedEventArgs e)
-        {
-            RefreshComboBox();
-        }
-
         // Apply
         private void Apply(object sender, RoutedEventArgs e)
         {
@@ -86,7 +81,6 @@ namespace WBR
 
         private void Apply()
         {
-
             Main.Stop();
             if (!Main.Started)
             {
@@ -117,8 +111,14 @@ namespace WBR
 
             Active.Text = Main.Started.ToString();
         }
+        private void Update()
+        {
+            ApplyConfig();
+            Apply();
+        }
         private void ApplyConfig()
         {
+            RefreshComboBox();
             Vid.Text = Config.VendorID.ToString("X");
             Pid.Text = Config.ProductID.ToString("X");
             Interval.Text = Config.Interval.ToString();
@@ -219,7 +219,7 @@ namespace WBR
         private void Settings(object sender, RoutedEventArgs e)
         {
             if(debugWindow == null || !debugWindow.IsLoaded || debugWindow.Visibility != Visibility.Visible)
-                debugWindow = new DebugWindow();
+                debugWindow = new DebugWindow(Update, ref Config);
 
             debugWindow.Show();
             if (debugWindow != null && debugWindow.IsVisible)
