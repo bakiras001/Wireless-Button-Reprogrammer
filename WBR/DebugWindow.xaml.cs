@@ -52,6 +52,8 @@ namespace WBR
         private DeviceHandler? selectedDevice = null;
 
         private Dictionary<byte[], int> bytes = new Dictionary<byte[], int>(new ByteArrayComparer());
+        private Dictionary<byte[], int> ignoreBytes = new Dictionary<byte[], int>(new ByteArrayComparer());
+
         private int SelectedVid = 0;
         private int SelectedPid = 0;
         private int Threshold = 1;
@@ -141,7 +143,7 @@ namespace WBR
         public void HandleBytes(byte[] data)
         {
             if (selectedDevice == null) return;
-            if (!bytes.ContainsKey(data))
+            if (!bytes.ContainsKey(data) && !ignoreBytes.ContainsKey(data))
             {
                 bytes[data] = 0;
             }
@@ -180,6 +182,14 @@ namespace WBR
             var t = new SaveWindow(SelectedVid, SelectedPid, bytesCleaned);
             t.Show();
         }
+
+        private void ClearAndIgnoreData(object sender, RoutedEventArgs e)
+        {
+            BytesTextBlock.Text = "";
+            ignoreBytes = new Dictionary<byte[], int>(bytes, new ByteArrayComparer());
+            bytes.Clear();
+        }
+
         private void Select(object sender, RoutedEventArgs e)
         {
 

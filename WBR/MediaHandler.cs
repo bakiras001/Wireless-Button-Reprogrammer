@@ -12,7 +12,7 @@ namespace WBR
     {
         // can be swapped by user to have a different functionality!
         public static byte NEXT = 0xB0;// keycode to jump to next track
-        public static byte PLAY_PAUSE = 0xB3;// keycode to play or pause a song
+        public static byte PLAY_PAUSE = 32;// keycode to play or pause a song
         public static byte PREV = 0xB1;// keycode to jump to prev track
 
 

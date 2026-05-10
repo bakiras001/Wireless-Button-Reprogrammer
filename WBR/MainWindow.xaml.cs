@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -168,7 +169,7 @@ namespace WBR
 
            // if (!rk.GetValueNames().Contains("WBR"))
             {
-                rk.SetValue("WBR", Environment.CurrentDirectory + "\\WBR.exe");
+                rk.SetValue("WBR", Assembly.GetExecutingAssembly().Location + "\\WBR.exe");
             }
 
             rk = Registry.LocalMachine.OpenSubKey
@@ -176,7 +177,7 @@ namespace WBR
 
             // if (!rk.GetValueNames().Contains("WBR"))
             {
-                rk.SetValue("WBR", Environment.CurrentDirectory + "\\WBR.exe");
+                rk.SetValue("WBR", Assembly.GetExecutingAssembly().Location + "\\WBR.exe");
             }
 
             rk = Registry.LocalMachine.OpenSubKey
@@ -184,7 +185,7 @@ namespace WBR
 
             // if (!rk.GetValueNames().Contains("WBR"))
             {
-                rk.SetValue("WBR", Environment.CurrentDirectory + "\\WBR.exe");
+                rk.SetValue("WBR", Assembly.GetExecutingAssembly().Location + "\\WBR.exe");
             }
 
 
