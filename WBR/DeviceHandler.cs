@@ -1,13 +1,9 @@
-﻿using System;
+﻿using HidLibrary;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-using HidLibrary;
-using Theraot;
 
 namespace WBR
 {
@@ -18,80 +14,89 @@ namespace WBR
     {
         private Device device;
         private List<HidDevice> devices;
-        private List<Thread> Threads;
-        private bool Abort = false;
+        private List<Task> tasks;
+        private CancellationTokenSource cts;
 
         public DeviceHandler(int vid, int pid, string name)
         {
             device = new Device(vid, pid, name);
         }
 
+        /// <summary>
+        /// Stops all running device tasks safely
+        /// </summary>
         public void Stop()
         {
-            Abort = true;
-            if (Threads == null) return;
-            for(int i = 0; i < Threads.Count; i++)
+            if (cts == null)
+                return;
+
+            cts.Cancel();
+
+            foreach (var d in devices)
             {
-                if (Threads[i] != null) Threads[i].Interrupt();
-                Threads.RemoveAt(i);
+                try { d.CloseDevice(); } catch { }
             }
         }
 
         /// <summary>
-        /// Initializes HID device and opens a thread for each "sub-hid"
+        /// Initializes HID device and starts one task per device
         /// </summary>
         public void Init(Action<byte[]> action)
         {
-            Abort = false;
-            devices = HidDevices.Enumerate(device.Vid, device.Pid).ToList();
+            Stop();
 
-            for (int i = 0; i < devices.Count(); i++)
+            cts = new CancellationTokenSource();
+
+            devices = HidDevices
+                .Enumerate(device.Vid, device.Pid)
+                .Where(d => d != null)
+                .ToList();
+
+            foreach (var d in devices)
             {
-                HidDevice device = devices[i];
-                if (device == null)
-                {
-                    devices.RemoveAt(i);
-                    break;
-                }
-
-                device.OpenDevice();
-                //device.MonitorDeviceEvents = true;
+                d.OpenDevice();
             }
 
-            // Creating threads
-            Threads = new List<Thread>(new Thread[devices.Count]);
-            for (int i = 0; i < devices.Count(); i++)
+            tasks = new List<Task>();
+
+            foreach (var hid in devices)
             {
-                HidDevice device = devices[i];
-                Threads[i] = new Thread(() =>
+                var localDevice = hid;
+
+                tasks.Add(Task.Run(() =>
                 {
-                    while (device != null && !Abort)
-                    {
-                        ReportHandler(device, action);
-                    }
-                });
-                Threads[i].Start();
+                    RunDeviceLoop(localDevice, action, cts.Token);
+                }, cts.Token));
             }
         }
 
         /// <summary>
-        /// Handles the bytes send by the device
+        /// Device read loop (replaces busy thread loop)
         /// </summary>
-        private void ReportHandler(HidDevice device, Action<byte[]> action )
+        private void RunDeviceLoop(HidDevice device, Action<byte[]> action, CancellationToken token)
         {
-            byte[] data = device.ReadReport().Data.ToArray();
-            Console.WriteLine(data);
-            if (data.Length < 1)
-                return;
-            try
+            while (!token.IsCancellationRequested && device != null)
             {
-                action(data);
-            } catch{}
-            //ActionHandler(data);
+                try
+                {
+                    var report = device.ReadReport();
+                    var data = report.Data?.ToArray();
 
+                    if (data == null || data.Length < 1)
+                        continue;
+
+                    action?.Invoke(data);
+                }
+                catch
+                {
+                    // optionally log or ignore read errors
+                }
+            }
         }
-        public void ActionHandler(byte[] data) {
-            if (DevicePresets.Contains(this.device.DeviceName, data) && !Abort)
+
+        public void ActionHandler(byte[] data)
+        {
+            if (DevicePresets.Contains(this.device.DeviceName, data))
             {
                 ClickHandler.HandleClick();
             }

@@ -58,21 +58,15 @@ namespace WBR
         /// <summary>
         /// Starts a new Thread to handle the waiting process until the interval has elapsed
         /// </summary>
-        private static void WaitForIntervalToFinish()
+        private static async void WaitForIntervalToFinish()
         {
-            // Start a new seperate thread
-            new Thread(() =>
+            await Task.Delay(TimeSpan.FromMilliseconds(ClickInterval));
+
+            if (ConsecutiveClicks == 2)
             {
-                // "Wait" until interval elapsed
-                while (Clock.ElapsedMilliseconds < ClickInterval) {}
-                // Check if in the elapsed time frame no other click occurred
-                if (ConsecutiveClicks == 2)
-                {
-                    MediaHandler.second();
-                    ConsecutiveClicks = 0;
-                }
-                return;
-            }).Start();
+                MediaHandler.second();
+                ConsecutiveClicks = 0;
+            }
         }
     }
 }
