@@ -82,9 +82,12 @@ namespace WBR
                     var report = device.ReadReport();
                     var data = report.Data?.ToArray();
 
-                    if (data == null || data.Length < 1)
-                        continue;
+                    if (data != null && data.Length < 1)
+                    {
 
+                        Thread.Sleep(50); // Adjust sleep time as needed to reduce CPU usage
+                        continue;
+                    }
                     action?.Invoke(data);
                 }
                 catch
