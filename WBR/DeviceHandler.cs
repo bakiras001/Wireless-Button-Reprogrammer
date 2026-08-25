@@ -75,24 +75,26 @@ namespace WBR
         /// </summary>
         private void RunDeviceLoop(HidDevice device, Action<byte[]> action, CancellationToken token)
         {
+            const int inactivityTimeoutMS = 50;
             while (!token.IsCancellationRequested && device != null)
             {
                 try
                 {
                     var report = device.ReadReport();
-                    var data = report.Data?.ToArray();
+                    var data = report.Data?.ToArray(); 
 
                     if (data != null && data.Length < 1)
-                    {
-
-                        Thread.Sleep(50); // Adjust sleep time as needed to reduce CPU usage
-                        continue;
-                    }
+                        throw new Exception("HID-Device data was empty!");
+                    
                     action?.Invoke(data);
                 }
                 catch
-                {
+                { 
                     // optionally log or ignore read errors
+                }
+                finally
+                {
+                    Thread.Sleep(inactivityTimeoutMS); // Reduce CPU usage; Sleep even when recieving bytes due to garbage bytes
                 }
             }
         }
