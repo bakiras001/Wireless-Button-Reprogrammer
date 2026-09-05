@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WBR"
         mc:Ignorable="d"
-        Title="WBR" Width="420" Background="#2B2D31" ResizeMode="CanMinimize" Height="173">
+        Title="WBR" Width="640" Background="#2B2D31" ResizeMode="CanResize" Height="480">
 
 
     <ListBox Name="controllerList" BorderBrush="#707070" BorderThickness="1" Background="#2B2D31"
