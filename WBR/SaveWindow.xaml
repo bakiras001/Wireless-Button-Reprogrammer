@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WBR"
         mc:Ignorable="d"
-        Title="Save?" Width="300" Height="80" Background="#2B2D31" ResizeMode="CanMinimize" SizeToContent="Height">
+        Title="Save?" Width="640" Height="480" Background="#2B2D31" ResizeMode="CanResize" SizeToContent="Height">
     <!-- Header row: only once -->
     <Grid Height="20" Margin="10">
         <Grid.ColumnDefinitions>
