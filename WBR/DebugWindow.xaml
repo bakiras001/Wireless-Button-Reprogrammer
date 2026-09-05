@@ -12,23 +12,14 @@
 
         <ListBox.ItemContainerStyle>
             <Style TargetType="ListBoxItem">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListBoxItem">
-                            <ContentPresenter/>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-
+                <Setter Property="Template">...</Setter>
                 <Setter Property="Margin" Value="2,1,2,1"/>
                 <Setter Property="Width" Value="auto"/>
                 <Setter Property="Focusable" Value="False"/>
                 <Setter Property="IsTabStop" Value="False"/>
-
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             </Style>
         </ListBox.ItemContainerStyle>
-
-
         
                 <ListBoxItem
             HorizontalAlignment="Stretch">
