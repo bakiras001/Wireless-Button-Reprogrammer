@@ -8,7 +8,7 @@
         Title="WBR" Width="640" Background="#2B2D31" ResizeMode="CanMinimize" Height="230">
 
     <ListBox Name="controllerList" BorderBrush="#707070" BorderThickness="1" Background="#2B2D31"
-             HorizontalAlignment="Stretch" Margin="3,3,3,3" >
+             HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="3,3,3,3" >
 
         <ListBox.ItemContainerStyle>
             <Style TargetType="ListBoxItem">
@@ -24,6 +24,7 @@
                 <Setter Property="Focusable" Value="False"/>
                 <Setter Property="IsTabStop" Value="False"/>
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="Top" />
             </Style>
         </ListBox.ItemContainerStyle>
                 
