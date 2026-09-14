@@ -65,7 +65,7 @@
                     </DockPanel>
 
                     <!-- Header row: only once -->
-                    <Grid Background="#313338" Height="20" Margin="0,0,0,5">
+                    <Grid Background="#313338" Height="28" Margin="0,0,0,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="6*" />
                             <ColumnDefinition Width="2*" />
@@ -73,13 +73,13 @@
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
                         <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="0">
-                            <TextBlock Text="Device" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                            <TextBlock Text="Device" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#AEAFB5"/>
                         </Border>
                         <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="1">
-                            <TextBlock Text="Vendor ID" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                            <TextBlock Text="Vendor ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#AEAFB5"/>
                         </Border>
                         <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="2">
-                            <TextBlock Text="Product ID" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                            <TextBlock Text="Product ID" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#AEAFB5"/>
                         </Border>
                         <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="3">
                         </Border>
@@ -89,7 +89,7 @@
                     <ItemsControl ItemsSource="{Binding Devices}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Background="#313338" Margin="0,0,0,0">
+                                <Grid Background="#313338" Height="28" Margin="0,0,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="6*" />
                                         <ColumnDefinition Width="2*" />
@@ -97,17 +97,17 @@
                                         <ColumnDefinition Width="2*" />
                                     </Grid.ColumnDefinitions>
                                     <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="0">
-                                        <TextBlock Text="{Binding DeviceName}" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                                        <TextBlock Text="{Binding DeviceName}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#AEAFB5"/>
                                     </Border>
                                     <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="1">
-                                        <TextBlock Text="{Binding Vid, StringFormat=0x{0:X4}}" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                                        <TextBlock Text="{Binding Vid, StringFormat=0x{0:X4}}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#AEAFB5"/>
                                     </Border>
                                     <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="2">
-                                        <TextBlock Text="{Binding Pid, StringFormat=0x{0:X4}}" HorizontalAlignment="Center" Foreground="#AEAFB5"/>
+                                        <TextBlock Text="{Binding Pid, StringFormat=0x{0:X4}}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#AEAFB5"/>
                                     </Border>
                                     <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="3">
                                         <Button Background="#313338" Click="Select" BorderThickness="0">
-                                            <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0" >Select</TextBlock>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0" >Select</TextBlock>
                                         </Button>
                                     </Border>
                                 </Grid>
@@ -117,25 +117,25 @@
 
                     <Border Margin="0 5 0 0" BorderBrush="#AEAFB5" BorderThickness="1" >
                         <StackPanel>
-                            <Grid Background="#313338" Height="20">
+                            <Grid Background="#313338" Height="28">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="6*" />
                                     <ColumnDefinition Width="2.5*" />
                                     <ColumnDefinition Width="1.5*" />
                                 </Grid.ColumnDefinitions>
                                 <Border BorderBrush="#AEAFB5" BorderThickness="0 0 1 1" Grid.Column="0">
-                                    <TextBlock Margin="10 0 0 0" Text="Detected bytes (wait ~10s before pressing):" FontWeight="Bold" HorizontalAlignment="Left" Foreground="#AEAFB5"/>
+                                    <TextBlock Margin="10 0 0 0" Text="Detected bytes (wait ~10s before pressing):" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#AEAFB5"/>
                                 </Border>
 
                                 <Border BorderBrush="#AEAFB5" BorderThickness="0 0 1 1" Grid.Column="1">
                                     <Button Background="#313338" BorderThickness="0" Click="ClearAndIgnoreData">
-                                        <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0" >Ignore and Clear</TextBlock>
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0" >Ignore and Clear</TextBlock>
                                     </Button>
                                 </Border>
 
                                 <Border BorderBrush="#AEAFB5" BorderThickness="0 0 0 1" Grid.Column="2">
                                     <Button Background="#313338" BorderThickness="0" Click="SavePreset">
-                                        <TextBlock HorizontalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0" >Save</TextBlock>
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#AEAFB5" Margin="0,0,0,0" >Save</TextBlock>
                                     </Button>
                                 </Border>
                             </Grid>
