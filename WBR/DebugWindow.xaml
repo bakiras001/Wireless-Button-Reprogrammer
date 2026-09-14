@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WBR"
         mc:Ignorable="d"
-        Title="WBR" Width="640" Background="#2B2D31" ResizeMode="CanMinimize" Height="230">
+        Title="WBR" Width="640" Background="#2B2D31" ResizeMode="CanMinimize" SizeToContent="Height">
+
+    <Window.Resources>
+        <local:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+    </Window.Resources>
 
     <ListBox Name="controllerList" BorderBrush="#707070" BorderThickness="1" Background="#2B2D31"
              HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="3,3,3,3" >
@@ -83,6 +87,20 @@
                         </Border>
                         <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="3">
                         </Border>
+                    </Grid>
+
+                    <!-- Empty placeholder row: shown only while Devices is empty -->
+                    <Grid Background="#313338" Height="28" Visibility="{Binding Devices.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="6*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="0"/>
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="1"/>
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1 1 0 1" Grid.Column="2"/>
+                        <Border BorderBrush="#AEAFB5" BorderThickness="1" Grid.Column="3"/>
                     </Grid>
 
                     <!-- ItemsControl: only items -->
