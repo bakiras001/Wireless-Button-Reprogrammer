@@ -56,15 +56,25 @@ namespace WBR
 
         public void LoadConfig()
         {
+            string json = FileHandler.ReadFromAppData(FileName);
+
+            if (string.IsNullOrEmpty(json))
+            {
+                // No config.json yet (first run, or the file was deleted) - this is expected, not an error.
+                SetConfigDefaults();
+                SaveConfig();
+                return;
+            }
+
             try
             {
-                string json = FileHandler.ReadFromAppData(FileName);
                 Config config =
                     JsonSerializer.Deserialize<Config>(json);
                 SetConfig(config);
             }
             catch(Exception e)
             {
+                // config.json exists but is corrupted/unreadable - this one is a genuine problem, so log it.
                 ErrorHandler.NewError(e);
                 SetConfigDefaults();
                 SaveConfig();
