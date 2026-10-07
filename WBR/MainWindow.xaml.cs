@@ -1,6 +1,7 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -32,6 +33,7 @@ namespace WBR
         private WindowState StoredWindowState = WindowState.Normal;
         public static Config Config = new Config();
         private static DebugWindow debugWindow = null;
+        private bool _isExiting = false;
         public MainWindow()
         {
             ErrorHandler.NewError("Starting");
@@ -110,6 +112,8 @@ namespace WBR
             Config.Device = GetDeviceName();
             Config.SaveConfig();
 
+            SetStartup();
+
             Active.Text = Main.Started.ToString();
         }
         private void Update()
@@ -147,6 +151,20 @@ namespace WBR
             WindowState = StoredWindowState;
             Activate();
         }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (!_isExiting && Config.ShouldHideInTray)
+            {
+                // Close (X) button pressed while "Hide in Tray" is enabled:
+                // cancel the real close and just hide the window instead.
+                e.Cancel = true;
+                Hide();
+                return;
+            }
+
+            base.OnClosing(e);
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             TrayIcon.Visible = false;
@@ -154,41 +172,53 @@ namespace WBR
             base.OnClosed(e);
             Process.GetCurrentProcess().Kill();
         }
+
+        /// <summary>
+        /// Call this to actually terminate the program (e.g. from the tray icon's Exit menu item),
+        /// bypassing the close-to-tray behavior in OnClosing.
+        /// </summary>
+        private void ExitApplication()
+        {
+            _isExiting = true;
+            Close();
+        }
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == WindowState.Minimized && Config.ShouldHideInTray) this.Hide();
 
             //base.OnStateChanged(e);
         }
+        private const string StartupRegistryKeyPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+        private const string StartupRegistryValueName = "WBR";
+
+        /// <summary>
+        /// Registers (or unregisters) WBR to launch at login, based on Config.ShouldHideInTray.
+        /// Only applies to the current user (HKCU) so it never needs admin rights.
+        /// </summary>
         private void SetStartup()
         {
-
-
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey
-                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-
-           // if (!rk.GetValueNames().Contains("WBR"))
+            try
             {
-                rk.SetValue("WBR", Assembly.GetExecutingAssembly().Location + "\\WBR.exe");
+                using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(StartupRegistryKeyPath, true))
+                {
+                    if (rk == null) return;
+
+                    if (Config.ShouldHideInTray)
+                    {
+                        string exePath = Assembly.GetExecutingAssembly().Location;
+                        rk.SetValue(StartupRegistryValueName, "\"" + exePath + "\"");
+                    }
+                    else
+                    {
+                        if (rk.GetValueNames().Contains(StartupRegistryValueName))
+                            rk.DeleteValue(StartupRegistryValueName, false);
+                    }
+                }
             }
-
-            rk = Registry.LocalMachine.OpenSubKey
-            ("SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-
-            // if (!rk.GetValueNames().Contains("WBR"))
+            catch (Exception e)
             {
-                rk.SetValue("WBR", Assembly.GetExecutingAssembly().Location + "\\WBR.exe");
+                ErrorHandler.NewError(e);
             }
-
-            rk = Registry.LocalMachine.OpenSubKey
-            ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\run", true);
-
-            // if (!rk.GetValueNames().Contains("WBR"))
-            {
-                rk.SetValue("WBR", Assembly.GetExecutingAssembly().Location + "\\WBR.exe");
-            }
-
-
         }
         
 
@@ -204,6 +234,13 @@ namespace WBR
             TrayIcon.Icon = new System.Drawing.Icon(FileHandler.EnvironmentPath + "icon.ico");
 
             TrayIcon.Click += new EventHandler(TrayIconClick);
+
+            var contextMenu = new ContextMenuStrip();
+            contextMenu.Items.Add("Open", null, (s, e) => TrayIconClick(s, e));
+            contextMenu.Items.Add(new ToolStripSeparator());
+            contextMenu.Items.Add("Exit", null, (s, e) => ExitApplication());
+            TrayIcon.ContextMenuStrip = contextMenu;
+
             StoredWindowState = WindowState;
         }
         private void Stop(object sender, RoutedEventArgs e)
