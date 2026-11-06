@@ -1,4 +1,3 @@
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -42,10 +41,7 @@ namespace WBR
             Main = new Main();
             SetupTray();
             Start();
-            SetStartup();
-
-
-
+            Autostart.RefreshPathIfEnabled();
         }
         // Start
         private void Start(object sender, RoutedEventArgs e)
@@ -111,8 +107,6 @@ namespace WBR
             Config.ProductID = ErrorHandler.Try(ParseHexStringToInt, Pid.Text);
             Config.Device = GetDeviceName();
             Config.SaveConfig();
-
-            SetStartup();
 
             Active.Text = Main.Started.ToString();
         }
@@ -188,41 +182,6 @@ namespace WBR
 
             //base.OnStateChanged(e);
         }
-        private const string StartupRegistryKeyPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
-        private const string StartupRegistryValueName = "WBR";
-
-        /// <summary>
-        /// Registers (or unregisters) WBR to launch at login, based on Config.ShouldHideInTray.
-        /// Only applies to the current user (HKCU) so it never needs admin rights.
-        /// </summary>
-        private void SetStartup()
-        {
-            try
-            {
-                using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(StartupRegistryKeyPath, true))
-                {
-                    if (rk == null) return;
-
-                    if (Config.ShouldHideInTray)
-                    {
-                        string exePath = Assembly.GetExecutingAssembly().Location;
-                        rk.SetValue(StartupRegistryValueName, "\"" + exePath + "\"");
-                    }
-                    else
-                    {
-                        if (rk.GetValueNames().Contains(StartupRegistryValueName))
-                            rk.DeleteValue(StartupRegistryValueName, false);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorHandler.NewError(e);
-            }
-        }
-        
-
-
         private void SetupTray()
         {
             TrayIcon = new NotifyIcon();
@@ -237,6 +196,25 @@ namespace WBR
 
             var contextMenu = new ContextMenuStrip();
             contextMenu.Items.Add("Open", null, (s, e) => TrayIconClick(s, e));
+
+            // Start with Windows (per-user HKCU\...\Run, no admin rights)
+            var startupItem = new ToolStripMenuItem("Start with Windows")
+            {
+                CheckOnClick = true,
+                Checked = Autostart.IsEnabled()
+            };
+            startupItem.Click += (s, e) =>
+            {
+                if (!Autostart.SetEnabled(startupItem.Checked))
+                {
+                    // could not write the registry value: show the real state again
+                    startupItem.Checked = Autostart.IsEnabled();
+                }
+            };
+            contextMenu.Items.Add(startupItem);
+            // refresh the tick each time the menu opens (e.g. changed in Task Manager > Startup apps)
+            contextMenu.Opening += (s, e) => startupItem.Checked = Autostart.IsEnabled();
+
             contextMenu.Items.Add(new ToolStripSeparator());
             contextMenu.Items.Add("Exit", null, (s, e) => ExitApplication());
             TrayIcon.ContextMenuStrip = contextMenu;
