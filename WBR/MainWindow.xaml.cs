@@ -197,7 +197,7 @@ namespace WBR
             var contextMenu = new ContextMenuStrip();
             contextMenu.Items.Add("Open", null, (s, e) => TrayIconClick(s, e));
 
-            // Start with Windows (per-user HKCU\...\Run, no admin rights)
+            // Start with Windows (scheduled task at logon, runs elevated without a UAC prompt)
             var startupItem = new ToolStripMenuItem("Start with Windows")
             {
                 CheckOnClick = true,
@@ -207,12 +207,12 @@ namespace WBR
             {
                 if (!Autostart.SetEnabled(startupItem.Checked))
                 {
-                    // could not write the registry value: show the real state again
+                    // could not create/delete the task: show the real state again
                     startupItem.Checked = Autostart.IsEnabled();
                 }
             };
             contextMenu.Items.Add(startupItem);
-            // refresh the tick each time the menu opens (e.g. changed in Task Manager > Startup apps)
+            // refresh the tick each time the menu opens (e.g. task removed in Task Scheduler)
             contextMenu.Opening += (s, e) => startupItem.Checked = Autostart.IsEnabled();
 
             contextMenu.Items.Add(new ToolStripSeparator());
