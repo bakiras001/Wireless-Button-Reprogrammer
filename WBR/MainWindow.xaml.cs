@@ -42,6 +42,19 @@ namespace WBR
             SetupTray();
             Start();
             Autostart.RefreshPathIfEnabled();
+
+            // Started by "Start with Windows": stay hidden in the system tray
+            if (Environment.GetCommandLineArgs().Any(a => String.Equals(a, Autostart.MinimizedArg, StringComparison.OrdinalIgnoreCase)))
+            {
+                TrayIcon.Visible = true;                  // the tray icon is the only way to reach the app now
+                WindowState = WindowState.Minimized;
+                ShowInTaskbar = false;                    // no taskbar button flashing up
+                Loaded += (s, e) =>
+                {
+                    Hide();
+                    ShowInTaskbar = true;                 // restore for when the user opens the window
+                };
+            }
         }
         // Start
         private void Start(object sender, RoutedEventArgs e)

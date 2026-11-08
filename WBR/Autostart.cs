@@ -21,6 +21,9 @@ namespace WBR
     {
         const string TaskName = "WBR";
 
+        /// <summary>Command-line switch the task passes so WBR starts hidden in the system tray.</summary>
+        public const string MinimizedArg = "--minimized";
+
         // Old versions wrote a Run-key value with this name; it never worked for an elevated app.
         const string LegacyRunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
         const string LegacyValueName = "WBR";
@@ -75,7 +78,8 @@ namespace WBR
 
         /// <summary>
         /// - If the old Run-key value exists, the user had autostart on: migrate it to the task.
-        /// - If the task exists but points to a different location (exe moved/updated), fix the path.
+        /// - If the task exists but points to a different location (exe moved/updated) or lacks the
+        ///   start-minimized switch (task made by an earlier build), recreate it.
         /// </summary>
         public static void RefreshPathIfEnabled()
         {
@@ -87,10 +91,12 @@ namespace WBR
                 if (enabled)
                 {
                     string xml = QuerySchtasks("/Query /TN \"" + TaskName + "\" /XML");
-                    if (xml == null || xml.IndexOf(ExePath, StringComparison.OrdinalIgnoreCase) < 0)
+                    if (xml == null
+                        || xml.IndexOf(ExePath, StringComparison.OrdinalIgnoreCase) < 0
+                        || xml.IndexOf(MinimizedArg, StringComparison.OrdinalIgnoreCase) < 0)
                     {
                         CreateTask();
-                        ErrorHandler.NewError("Autostart path updated to " + ExePath);
+                        ErrorHandler.NewError("Autostart task updated for " + ExePath);
                     }
                 }
                 else if (hadLegacy)
@@ -148,6 +154,7 @@ namespace WBR
 "  <Actions Context=\"Author\">\r\n" +
 "    <Exec>\r\n" +
 "      <Command>" + SecurityElement.Escape(exe) + "</Command>\r\n" +
+"      <Arguments>" + MinimizedArg + "</Arguments>\r\n" +
 "      <WorkingDirectory>" + SecurityElement.Escape(dir) + "</WorkingDirectory>\r\n" +
 "    </Exec>\r\n" +
 "  </Actions>\r\n" +
