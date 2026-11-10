@@ -28,6 +28,15 @@ namespace WBR
         const string LegacyRunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
         const string LegacyValueName = "WBR";
 
+        public static bool IsMinimizedLaunch()
+        {
+            foreach (string arg in Environment.GetCommandLineArgs())
+            {
+                if (String.Equals(arg, MinimizedArg, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+
         static string ExePath
         {
             get { return Environment.ProcessPath; }

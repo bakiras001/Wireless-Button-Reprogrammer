@@ -14,6 +14,20 @@ namespace WBR
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            WBR.MainWindow window = new WBR.MainWindow();
+            MainWindow = window;
+
+            // Started by "Start with Windows": the window is never shown, the app just sits in the
+            // system tray (click the tray icon / "Open" to show it).
+            if (!Autostart.IsMinimizedLaunch())
+            {
+                window.Show();
+            }
+        }
     }
 
 }

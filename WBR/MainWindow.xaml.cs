@@ -35,7 +35,7 @@ namespace WBR
         private bool _isExiting = false;
         public MainWindow()
         {
-            ErrorHandler.NewError("Starting");
+            ErrorHandler.NewError("Starting " + Environment.CommandLine);
             InitializeComponent();
 
             Main = new Main();
@@ -43,17 +43,11 @@ namespace WBR
             Start();
             Autostart.RefreshPathIfEnabled();
 
-            // Started by "Start with Windows": stay hidden in the system tray
-            if (Environment.GetCommandLineArgs().Any(a => String.Equals(a, Autostart.MinimizedArg, StringComparison.OrdinalIgnoreCase)))
+            // Started by "Start with Windows": App.OnStartup never shows the window, so the tray icon
+            // is the only way to reach the app.
+            if (Autostart.IsMinimizedLaunch())
             {
-                TrayIcon.Visible = true;                  // the tray icon is the only way to reach the app now
-                WindowState = WindowState.Minimized;
-                ShowInTaskbar = false;                    // no taskbar button flashing up
-                Loaded += (s, e) =>
-                {
-                    Hide();
-                    ShowInTaskbar = true;                 // restore for when the user opens the window
-                };
+                TrayIcon.Visible = true;
             }
         }
         // Start
